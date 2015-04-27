@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
+<style>
+	.red{ background-color: #f00;}
+	.yellow{ background-color: #ff0;}
+	.blue{background-color: blue;}
+	.green{background-color: green;}
+
+	*{ padding: 0; margin: 0;}
+	.content{ position: relative;}
+	.box{ width: 100%; position: absolute; top: 0; left: 0; z-index: 1;}
+
+	.bcgbox{ background-repeat: no-repeat; background-position: center top; background-size: auto 100%; margin: -100px 0 0; position: relative; z-index: 1;}
+	.bcg1{ background-image: url("images/banner1.jpg");}
+	.bcg2{ background-image: url("images/banner2.jpg");}
+	.bcg3{ background-image: url("images/banner3.jpg");}
+	.bcg4{ background-image: url("images/banner4.jpg");}
+	.bcg5{ background-image: url("images/banner5.jpg");}
+
+	.wrapper{ height: 400px; background-color: white; position: relative; z-index: 2}
+	
+	.banner{ background-image: url("images/banner.jpg"); background-repeat: no-repeat; background-size: 100% 100%; background-position: center center; position: relative; z-index: 1;}
+	
+	.movepic{ transform: martix(1,0,0,1,0,0)}
+</style>
+<script>
+	function getStyle(obj, name){
+		if(obj.currentStyle){
+			return obj.currentStyle[name];
+		}else {
+			return getComputedStyle(obj, false)[name];
+		}
+	}
+	function addEvent(obj, sEv, fn){
+		if(obj.attachEvent){
+			obj.attachEvent('on'+sEv, fn);
+		}else{
+			obj.addEventListener(sEv, fn, false);
+		}
+	}
+	$(function(){
+		var baseH = $(window).height();
+		// alert(baseH)
+		$('.banner').height(baseH);
+		$('.placeholder').height(baseH);
+		$('.bcgbox').height(2*baseH/3);
+
+		var box = document.getElementsByClassName('box')[0];
+		// 图片1
+		var bcg1 = $('.bcg1')[0];
+		var bcg1Top = bcg1.offsetTop;
+		var bcg1Bottom = bcg1Top + bcg1.offsetHeight;
+
+		// 图片2
+		var bcg2 = $('.bcg2')[0];
+		var bcg2Top = bcg2.offsetTop;
+		var bcg2Bottom = bcg2Top + bcg2.offsetHeight;
+
+		// 图片3
+		var bcg3 = $('.bcg3')[0];
+		var bcg3Top = bcg3.offsetTop;
+		var bcg3Bottom = bcg3Top + bcg3.offsetHeight;
+		// 图片4
+		var bcg4 = $('.bcg4')[0];
+		var bcg4Top = bcg4.offsetTop;
+		var bcg4Bottom = bcg4Top + bcg4.offsetHeight;
+		// 图片5
+		var bcg5 = $('.bcg5')[0];
+		var bcg5Top = bcg5.offsetTop;
+		var bcg5Bottom = bcg5Top + bcg5.offsetHeight;
+
+		var bcgY = 0,
+		 	bcg1Y = 0,
+		 	bcg2Y = 0,
+		 	bcg3Y = 0,
+		 	bcg4Y = 0,
+		 	bcg5Y = 0;
+
+		addWheel(document, function(down){
+			var t = parseInt(getStyle(box, 'top').replace('px', ''));
+
+			var dis = -t + baseH;
+			// console.log('dis1:'+dis1);
+			// console.log('tttt:'+-t)
+			// console.log('offsetTop:' + bcg1Top)
+
+			if(down)
+			{
+				bcgY += 1;
+				$('.banner')[0].style.transform = 'matrix(1,0,0,1,0,'+bcgY+')';
+
+				if(t<=5 && t>0){
+					t = 0;
+					box.style.top = t + 'px';
+				}else {
+					box.style.top = t - 5 +'px';
+				}
+				// 图片1的临界点
+				if(dis > bcg1Top && -t < bcg1Bottom ){
+					bcg1Y += 0.4;
+					bcg1.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg1Y+')';
+				}
+				// 图片2的临界点
+				if(dis > bcg2Top && -t < bcg2Bottom ){
+					bcg2Y += 0.4;
+					bcg2.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg2Y+')';
+				}
+				// 图片3的临界点
+				if(dis > bcg3Top && -t < bcg3Bottom ){
+					bcg3Y += 0.4;
+					bcg3.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg3Y+')';
+				}
+				// 图片4的临界点
+				if(dis > bcg4Top && -t < bcg4Bottom ){
+					bcg4Y += 0.4;
+					bcg4.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg4Y+')';
+				}
+				// 图片5的临界点
+				if(dis > bcg5Top && -t < bcg5Bottom ){
+					bcg5Y += 0.4;
+					bcg5.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg5Y+')';
+				}
+				
+			}else{
+				
+				bcgY -= 1;
+				if(bcgY<=0)
+					bcgY=0;
+				$('.banner')[0].style.transform = 'matrix(1,0,0,1,0,'+bcgY+')';
+
+				if(t>=-5){
+					t = 0;
+					box.style.top = t +'px';
+				}else{
+					box.style.top = t + 5 +'px';
+				}
+				// 图片1的临界点
+				if(dis > bcg1Top && -t < bcg1Bottom ){
+					bcg1Y -= 0.4;
+					bcg1.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg1Y+')';
+				}
+				// 图片2的临界点
+				if(dis > bcg2Top && -t < bcg2Bottom ){
+					bcg2Y -= 0.4;
+					bcg2.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg2Y+')';
+				}
+				// 图片3的临界点
+				if(dis > bcg3Top && -t < bcg3Bottom ){
+					bcg3Y -= 0.4;
+					bcg3.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg3Y+')';
+				}
+				// 图片4的临界点
+				if(dis > bcg4Top && -t < bcg4Bottom ){
+					bcg4Y -= 0.4;
+					bcg4.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg4Y+')';
+				}
+				// 图片5的临界点
+				if(dis > bcg5Top && -t < bcg5Bottom ){
+					bcg5Y -= 0.4;
+					bcg5.style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg5Y+')';
+				}
+				
+			}
+		});
+		
+	});
+
+	function addWheel(obj,fn){
+		function fnWheel(ev){
+			var oEvent=ev || event;
+			
+			var down=true;
+			down=oEvent.wheelDelta?oEvent.wheelDelta<0:oEvent.detail>0;
+			
+			fn && fn(down,oEvent);
+			//alert(oEvent.preventDefault);
+			oEvent.preventDefault && oEvent.preventDefault();
+			return false;
+		}
+		
+		if(window.navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){
+			obj.addEventListener('DOMMouseScroll',fnWheel,false);
+		}else{
+			//obj.onmousewheel=fnWheel;	
+			addEvent(obj,'mousewheel',fnWheel);
+		}	
+	}
+</script>
+</head>
+<body>
+	<header>
+		
+	</header>
+    <div class="content">
+    	<div class="box">
+    		<div class="banner" ></div>
+    		<div class="wrapper"></div>
+    		<div class="bcgbox bcg1"></div>
+    		<div class="wrapper"></div>
+    		<div class="bcgbox bcg2"></div>
+    		<div class="wrapper"></div>
+    		<div class="bcgbox bcg3"></div>
+    		<div class="wrapper"></div>
+    		<div class="bcgbox bcg4"></div>
+    		<div class="wrapper"></div>
+    		<div class="bcgbox bcg5"></div>
+    		<div class="wrapper"></div>
+    		
+    	</div>
+    </div>
+</body>
+</html>

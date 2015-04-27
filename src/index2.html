@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>开课吧 | 企业邦</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="css/style.css" rel="stylesheet">
+<!-- <script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script> -->
+<script src="js/jquery.min.js"></script>
+<style>
+	
+</style>
+<script>
+	var initScale = $(window).width()/$(window).height();
+	var bannerScale = 1920/986 ;
+	var bcgScale = 1600/700;
+
+	function setBackground(){
+		var w = $(window).width();
+		var h = $(window).height();
+
+		$('.banner').height(h);
+		$('.bannerbox').height(h);
+		// document.title = h;
+		var scale = w/h;
+
+		if( scale > bannerScale){
+			$('.banner').removeClass('fullHeight').addClass('fullWidth');
+		}else{
+			$('.banner').removeClass('fullWidth').addClass('fullHeight');
+		}
+
+		if( w/700 > bcgScale){
+			$('.bcgbox div').removeClass('fullHeight').addClass('fullWidth');
+		}else{
+			$('.bcgbox div').removeClass('fullWidth').addClass('fullHeight');
+		}
+	}
+	function getStyle(obj, name){
+		if(obj.currentStyle){
+			return obj.currentStyle[name];
+		}else {
+			return getComputedStyle(obj, false)[name];
+		}
+	}
+	function addEvent(obj, sEv, fn){
+		if(obj.attachEvent){
+			obj.attachEvent('on'+sEv, fn);
+		}else{
+			obj.addEventListener(sEv, fn, false);
+		}
+	}
+
+	function showWindow(obj){
+		$('.mask').removeClass('hide');
+		$(obj).removeClass('hide');
+		var h = $(window).height();
+		var objH = obj.offsetHeight;
+		$(obj).css('top', (h-objH)/2);
+				
+	}
+	function hideWindow(obj){
+		
+		$('.mask').addClass('hide');
+		$(obj).addClass('hide');
+	}
+	$(function(){
+		var baseH = $(window).height();
+		var baseW = $(window).width();
+		var baseScale = baseW/baseH;
+		if( baseScale> bannerScale){
+			$('.banner').addClass('fullWidth');
+		}else{
+			$('.banner').addClass('fullHeight');
+		}
+		if( baseW/700 > bcgScale){
+			$('.bcgbox div').removeClass('fullHeight').addClass('fullWidth');
+		}else{
+			$('.bcgbox div').removeClass('fullWidth').addClass('fullHeight');
+		}
+
+		var t = document.body.scrollTop;
+		if (!headScreen && t > baseH){
+			$('header').addClass('scroll');
+			// headScreen = false;
+			$('.reg').html('注册企业邦');
+		}
+		$('.arrow').click(function(){
+			var timer = setInterval(function(){
+				banneropacity -= 0.1;
+				if(banneropacity < 0)
+					banneropacity = 0;
+				$('.bannercon')[0].style.opacity = banneropacity;
+				t += 10;
+				document.body.scrollTop = t;
+				if( t >= baseH){
+					document.body.scrollTop = baseH;
+					clearInterval(timer);
+					timer = null;
+				}
+				if (baseH < (t + 65) && headScreen){
+					$('header').addClass('scroll');
+					headScreen = false;
+					$('.reg').html('注册企业邦');
+				}
+			}, 10);
+			
+		});
+		var headScreen = true;
+		// alert(baseH)
+		$('.bannerbox').height(baseH);
+		$('.banner').height(baseH);
+		$('.banner .commonWidth').height(baseH);
+
+		var box = document.getElementsByClassName('box')[0];
+		// 图片1
+		var bcg1 = $('.bcgbox')[0];
+		var movediv1 = $('.bcgbox').eq(0).find('.bcg1');
+		var bcg1Top = bcg1.offsetTop;
+		// document.title=bcg1Top;
+		var bcg1Bottom = bcg1Top + bcg1.offsetHeight;
+
+		// 图片2
+		var bcg2 = $('.bcgbox')[1];
+		var movediv2 = $('.bcgbox').eq(1).find('.bcg2');
+		var bcg2Top = bcg2.offsetTop;
+		var bcg2Bottom = bcg2Top + bcg2.offsetHeight;
+
+		// 图片3
+		var bcg3 = $('.bcgbox')[2];
+		var movediv3 = $('.bcgbox').eq(2).find('.bcg3');
+		var bcg3Top = bcg3.offsetTop;
+		var bcg3Bottom = bcg3Top + bcg3.offsetHeight;
+		// 图片4
+		var bcg4 = $('.bcgbox')[3];
+		var movediv4 = $('.bcgbox').eq(3).find('.bcg4');
+		var bcg4Top = bcg4.offsetTop;
+		var bcg4Bottom = bcg4Top + bcg4.offsetHeight;
+		// 图片5
+		var bcg5 = $('.bcgbox')[4];
+		var movediv5 = $('.bcgbox').eq(4).find('.bcg5');
+		var bcg5Top = bcg5.offsetTop;
+		var bcg5Bottom = bcg5Top + bcg5.offsetHeight;
+
+		var bcgY = 0,
+		 	bcg1Y = 0,
+		 	bcg2Y = 0,
+		 	bcg3Y = 0,
+		 	bcg4Y = 0,
+		 	bcg5Y = 0;
+
+	 	var banneropacity = 1;
+		addWheel(document, function(down, ev){
+			t = document.body.scrollTop;
+			var dis = t + baseH;
+			// console.log('dis1:'+dis1);
+			// console.log('tttt:'+-t)
+			// console.log('offsetTop:' + bcg1Top)
+			var detail = ev.detail || ev.wheelDelta;
+			// console.log(detail)
+			if(dis < document.body.scrollHeight){
+				if(down)
+				{
+					if (baseH < (t + 65) && headScreen){
+						$('header').addClass('scroll');
+						headScreen = false;
+						$('.reg').html('注册企业邦');
+					}
+					bcgY -= detail/10;
+					// document.title = bcgY;
+					banneropacity+=detail/1000;
+					if(banneropacity < 0)
+						banneropacity = 0;
+					$('.bannercon')[0].style.opacity = banneropacity;
+					$('.banner')[0].style.transform = 'matrix(1,0,0,1,0,'+bcgY.toFixed(2)+')';
+
+
+					// 图片1的临界点
+					if(dis > bcg1Top && t < bcg1Bottom ){
+						bcg1Y -= detail/20;
+						movediv1[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg1Y.toFixed(2)+')';
+					}
+					// 图片2的临界点
+					if(dis > bcg2Top && t < bcg2Bottom ){
+						bcg2Y -= detail/20;
+						movediv2[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg2Y.toFixed(2)+')';
+					}
+					// 图片3的临界点
+					if(dis > bcg3Top && t < bcg3Bottom ){
+						bcg3Y -= detail/20;
+						movediv3[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg3Y.toFixed(2)+')';
+					}
+					// 图片4的临界点
+					if(dis > bcg4Top && t < bcg4Bottom ){
+						bcg4Y -= detail/20;
+						movediv4[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg4Y.toFixed(2)+')';
+					}
+					// 图片5的临界点
+					if(dis > bcg5Top && t < bcg5Bottom ){
+						bcg5Y -= detail/20;
+						movediv5[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg5Y.toFixed(2)+')';
+					}
+					
+				}else{
+					if (baseH - 65 > t){
+						$('header').removeClass('scroll');
+						headScreen = true;
+						$('.reg').html('注册');
+					}
+					bcgY -=  detail/10;
+					if(bcgY<=0)
+						bcgY=0;
+					if( t < baseH){
+						banneropacity+=detail/1000;
+						if(banneropacity > 1)
+							banneropacity = 1;
+						$('.bannercon')[0].style.opacity = banneropacity;
+					}
+					
+					$('.banner')[0].style.transform = 'matrix(1,0,0,1,0,'+bcgY.toFixed(2)+')';
+
+					// 图片1的临界点
+					if(dis > bcg1Top && t < bcg1Bottom ){
+						bcg1Y -= detail/20;
+						movediv1[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg1Y.toFixed(2)+')';
+					}
+					// 图片2的临界点
+					if(dis > bcg2Top && t < bcg2Bottom ){
+						bcg2Y -= detail/20;
+						movediv2[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg2Y.toFixed(2)+')';
+					}
+					// 图片3的临界点
+					if(dis > bcg3Top && t < bcg3Bottom ){
+						bcg3Y -= detail/20;
+						movediv3[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg3Y.toFixed(2)+')';
+					}
+					// 图片4的临界点
+					if(dis > bcg4Top && t < bcg4Bottom ){
+						bcg4Y -= detail/20;
+						movediv4[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg4Y.toFixed(2)+')';
+					}
+					// 图片5的临界点
+					if(dis > bcg5Top && t < bcg5Bottom ){
+						bcg5Y -= detail/20;
+						movediv5[0].style.transform = 'matrix(1, 0, 0, 1, 0,'+bcg5Y.toFixed(2)+')';
+					}
+					
+				}
+			}
+			
+		});
+
+		$('.addinqyb').click(function(ev){
+			// console.log(ev.target);
+			// if(ev.target == 	)
+			showWindow($('.addin')[0]);
+		});
+		
+		$('.addin .close').click(function(){
+			hideWindow($('.addin')[0]);
+		});
+
+		window.onresize = function(){
+			baseH = $(window).height();
+			baseW = $(window).width();
+			baseScale = baseW/baseH;
+
+			setBackground();
+		};
+
+	});
+	
+	
+	function addWheel(obj,fn){
+		function fnWheel(ev){
+			var oEvent=ev || event;
+			var down=true;
+			down=oEvent.wheelDelta?oEvent.wheelDelta<0:oEvent.detail>0;
+			
+			fn && fn(down,oEvent);
+			//alert(oEvent.preventDefault);
+			// oEvent.preventDefault && oEvent.preventDefault();
+			// return false;
+		}
+		if(window.navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){
+			obj.addEventListener('DOMMouseScroll',fnWheel,false);
+		}else{
+			//obj.onmousewheel=fnWheel;	
+			addEvent(obj,'mousewheel',fnWheel);
+		}	
+		function removeWheel(obj,fn){
+			if(window.navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){
+				obj.removeEventListener('DOMMouseScroll',fnWheel,false);
+			}else{
+				detachEvent(obj,'mousewheel',fnWheel);
+			}
+		}
+	}
+
+	
+</script>
+</head>
+<body id="index">
+    <header class="index clearfix">
+    	<div class="logo"></div>
+    	<div class="nav">
+    		<a href="javascript:;">什么是企业邦</a>
+    		<a href="javascript:;">登录</a>
+    		<a href="javascript:;" class="reg addinqyb">注册</a>
+    	</div>
+    </header>
+	<div class="box">
+		<div class="bannerbox">
+			<div class="banner">
+				<div class="commonWidth">
+					<div class="bannercon">
+						<div class="bannertext"></div>
+						<input type="button" class="regbtn addinqyb">
+					</div>
+					<div class="arrow"></div>
+				</div>
+			</div>
+		</div>
+		<div class="wrapper cha1">
+			<div class="commonWidth"></div>
+		</div>
+		<div class="bcgbox">
+			<div class="bcg1"></div>
+		</div>
+		<div class="wrapper cha2">
+			<div class="commonWidth"></div>
+		</div>
+		<div class="bcgbox">
+			<div class="bcg2"></div>
+		</div>
+		<div class="wrapper cha3">
+			<div class="commonWidth"></div>
+		</div>
+		<div class="bcgbox">
+			<div class="bcg3"></div>
+		</div>
+		<div class="wrapper cha4">
+			<div class="commonWidth">
+				<ul class="clearfix">
+					<li><img src="images/icon1.jpg" alt=""></li>
+					<li><img src="images/icon2.jpg" alt=""></li>
+					<li><img src="images/icon3.jpg" alt=""></li>
+					<li><img src="images/icon4.jpg" alt=""></li>
+					<li><img src="images/icon5.jpg" alt=""></li>
+					<li><img src="images/icon6.jpg" alt=""></li>
+					<li><img src="images/icon7.jpg" alt=""></li>
+					<li><img src="images/icon8.jpg" alt=""></li>
+				</ul>
+			</div>
+		</div>
+		<div class="bcgbox">
+			<div class="bcg4"></div>
+		</div>
+		<div class="wrapper cha5">
+			<div class="commonWidth">
+				<ul class="clearfix">
+					<li>
+						<div class="intro">
+							<div class="photobox"><img src="images/photo1.png" alt=""><span></span></div>
+							<p class="name">王文斌</p>
+							<p class="pos">阿里云总裁</p>
+						</div>
+						<p class="txt">阿里云与慧科企业邦同属技术型公司，双方合作共建企业生态系统，服务不同层次的用户需求，并且保证了产品的稳定性，安全性，同时提高了业务效率和价值链条。</p>
+					</li>
+					<li>
+						<div class="intro">
+							<div class="photobox"><img src="images/photo2.png" alt=""><span></span></div>
+							<p class="name">宋家瑜</p>
+							<p class="pos">VMware 大中华区总裁</p>
+						</div>
+						<p class="txt">云已经成为中国大地上不可逆转的IT趋势，它几乎包括了所有的IT变革——从虚拟化、到数据中心、私有云、再到移动的工作形态以及公有云服务，可以说是得云者得天下，慧科与我们同样在向这个方向努力，双方的合作必将对市场带来更大的推动作用。</p>
+					</li>
+					<li>
+						<div class="intro">
+							<div class="photobox"><img src="images/photo3.png" alt=""><span></span></div>
+							<p class="name">大兵老师</p>
+							<p class="pos">凹凸人网CEO</p>
+						</div>
+						<p class="txt">凹凸人是目前国内领先的高校就业服务平台,与慧科企业邦的合作促进了双方共同的利益，共同促进校园人才的职业化成长和发展，推动社会和谐揽才。</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="bcgbox">
+			<div class="bcg5"></div>
+		</div>
+		<div class="wrapper cha6">
+			<input type="button" class="regbtn addinqyb">
+		</div>
+		<div class="bcgbox">
+			<div class="bcg6"></div>
+		</div>
+		<footer class="index"><span>Powered by 开课吧</span></footer>
+	</div>
+	<div class="mask hide"></div>
+	<div class="addin hide"><!-- 成功时添加 addSucc 类 -->
+		<h3><a href="javascript:;" class="close"><img src="images/close.jpg" alt=""></a></h3>
+		<div class="infbox">
+			<form action="">
+				<p><span class="red">*</span><input type="text" placeholder="请输入您的姓名"></p>
+				<p><span class="red">*</span><input type="text" placeholder="请输入您的联系方式，如手机号、邮箱、QQ号等"></p>
+				<p><span class="red">*</span><input type="text"  placeholder="请输入您的企业名称"></p>
+				<input type="button" value="立即申请">
+			</form>
+		</div>
+		<div class="addsuccBox hide">
+			<img src="images/greenSucc.png" alt="">
+			<p class="addinfo">提交成功</p>
+			<p class="addinfo">感谢您对我们的信任，我们将尽快联系您！</p>
+			<p><span class="gray">5秒钟后自动跳转到企业邦</span></p>
+		</div>
+	</div>
+</body>
+</html>
